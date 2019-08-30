@@ -4,9 +4,20 @@ const router = express.Router();
 //model import
 const Movie = require('../model/Movie');
 
+// Get All Movie
 router.get('/', (req, res) =>{
   const promise = Movie.find({ });
   promise.then((data)=>{
+    res.json(data);
+  }).catch((err)=>{
+    res.json(err);
+  });
+});
+
+// id'ye göre film çekme
+router.get('/:movie_id', (req, res)=>{
+  const promise = Movie.findById(req.params.movie_id);
+  promise.then((data) => {
     res.json(data);
   }).catch((err)=>{
     res.json(err);
