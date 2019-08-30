@@ -4,6 +4,15 @@ const router = express.Router();
 //model import
 const Movie = require('../model/Movie');
 
+router.get('/', (req, res) =>{
+  const promise = Movie.find({ });
+  promise.then((data)=>{
+    res.json(data);
+  }).catch((err)=>{
+    res.json(err);
+  });
+});
+
 router.post('/', (req, res, next) => {
     // 1. yol.
     //const {title, category, country, year, director, imdb_score}  = req.body; //title atamalari. //destry acting
