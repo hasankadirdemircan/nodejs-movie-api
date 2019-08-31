@@ -9,11 +9,57 @@ router.post('/', (req, res, next) => {
   const director = new Director(req.body);
   const promise = director.save();
 
-  promise.then((data)=>{
+  promise.then((data) => {
     res.json(data);
   }).catch((err)=>{
     res.json(err);
   });
 });
 
+//tüm director ve filmlerini listeler.
+router.get('/', (req, res) => {
+  const promise = Director.aggregate([
+    {
+      $lookup: {
+        from: 'movies',//join edilecek tablo collection
+        localField: '_id', //director tablosundkai eşlenecek field.
+        foreignField: 'director_id', //movies collections'da hangi field ile eşleşecek.
+        as: 'movies' //dönen datanın atacağı değişken object.
+      }
+    },
+    {
+      $unwind: {
+        path: '$movies', //lookup'da dönen datayı alıyoruz.
+        preserveNullAndEmptyArrays: true //filmi olmayan directorlerde gelsin.
+      }
+    },
+    {//director objesi icerisinde filmler gösterilmesi icin.
+      $group: {
+        _id: {
+          _id: '$_id',
+          name: '$name',
+          surname: '$surname',
+          bio: '$bio'
+        },
+        movies: {
+          $push: '$movies'
+        }
+      }
+    },
+    {
+      $project: {
+				_id: '$_id._id',
+				name: '$_id.name',
+				surname: '$_id.surname',
+				movies: '$movies'
+			}
+    }
+  ]);
+
+  promise.then((data) => {
+    res.json(data);
+  }).catch((err) => {
+    res.json(err);
+  });
+});
 module.exports = router;
