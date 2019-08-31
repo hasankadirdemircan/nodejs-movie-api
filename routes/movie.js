@@ -114,7 +114,7 @@ router.post('/', (req, res, next) => {
 router.get('/between/:start_year/:end_year', (req, res) =>{
   const { start_year, end_year } = req.params;
   const promise = Movie.find({
-    year: { "$gte": start_year, "$lte": end_year}
+    year: { "$gte": parseInt(start_year), "$lte": parseInt(end_year)}
    });
   promise.then((data)=>{
 
