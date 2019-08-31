@@ -13,7 +13,9 @@ const app = express();
 
 // db baglantisi.
 const db = require('./helper/db.js')(); //fonksiyonu calistiriyor.
-
+//Config jwt için secret key.
+const config = require('./config');
+app.set('api_secret_key', config.api_secret_key);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
