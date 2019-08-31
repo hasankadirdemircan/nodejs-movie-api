@@ -130,4 +130,18 @@ router.put('/:director_id', (req, res, next)=>{
     res.json(err);
   });
 });
+
+// id'ye göre director silme
+router.delete('/:director_id', (req, res, next)=>{
+  const promise = Director.findByIdAndDelete(req.params.director_id);
+  promise.then((data) => {
+    if(!data)
+      next({message: 'The director was not found', code: 99});
+
+    res.json(data);
+  }).catch((err)=>{
+    res.json(err);
+  });
+});
+
 module.exports = router;
