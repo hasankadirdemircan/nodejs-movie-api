@@ -115,4 +115,19 @@ router.get('/:director_id', (req, res) => {
     res.json(err);
   });
 });
+
+// id'ye gore director güncelleme.
+// new: true -> güncellenmiş datayı döndürmek için.
+router.put('/:director_id', (req, res, next)=>{
+  const promise = Director.findByIdAndUpdate(req.params.director_id, req.body, {new: true});
+
+  promise.then((data) => {
+    if(!data)
+      next({message: 'The director was not found', code: 99});
+
+    res.json(data);
+  }).catch((err)=>{
+    res.json(err);
+  });
+});
 module.exports = router;
